@@ -27,4 +27,5 @@ iex -S mix
 FetchCovidData.save_cases_by_age_data()
 FetchCovidData.save_deaths_by_age_data()
 ProcessCovidData.get_combined_age_output()
+FetchCovidData.save_deaths_by_medcond()
 ```

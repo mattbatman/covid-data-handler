@@ -20,6 +20,14 @@ defmodule FetchCovidData do
   end
 
   @doc """
+  Fetches and writes deaths count by underlying medical condition (yes, no, missing, unknown) to JSON.
+  """
+  def save_deaths_by_medcond() do
+    fetch_deaths_by_medcond()
+    |> handle_fetch(System.get_env("DEATHS_BY_MEDCOND_OUTPUT"))
+  end
+
+  @doc """
   Takes an HTTPPoison response and a file path and name and writes the to the file path, if successful.
   """
   def handle_fetch(resp, output) do
@@ -33,6 +41,13 @@ defmodule FetchCovidData do
       {:error, %HTTPoison.Error{reason: reason}} ->
         IO.inspect(reason)
     end
+  end
+
+  @doc """
+  Fetches the total number of deaths for each underlying medical condition category.
+  """
+  def fetch_deaths_by_medcond() do
+    fetch_cdc_data("?$select=medcond_yn,count(*)&$where=death_yn='Yes'&$group=medcond_yn")
   end
 
   @doc """
