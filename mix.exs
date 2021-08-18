@@ -22,7 +22,8 @@ defmodule CovidData.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.7"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:csv, "~> 2.4"}
     ]
   end
 end

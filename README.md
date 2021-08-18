@@ -16,6 +16,8 @@ mix deps.get
 
 Copy `.example.env` as `.env` and complete the environment variables. You'll need an API app key from the CDC for the [COVID-19 Case Surveillance Public Use Data](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf). You'll also need to configure the output file names and directories.
 
+Two of the methods also require downloading provisional CDC data for daily cases and deaths [here](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases).
+
 ### Use
 
 The module `FetchCovidData` is responsible for interactions with the API. The module `ProcessCovidData` performs data transformations on the JSON files already created from `FetchCovidData`.
@@ -28,4 +30,6 @@ FetchCovidData.save_cases_by_age_data()
 FetchCovidData.save_deaths_by_age_data()
 ProcessCovidData.get_combined_age_output()
 FetchCovidData.save_deaths_by_medcond()
+ProcessCovidData.get_daily_deaths_output()
+ProcessCovidData.get_daily_cases_output()
 ```

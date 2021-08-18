@@ -46,4 +46,45 @@ defmodule ProcessCovidData do
 
     combined_data
   end
+
+  @doc """
+  Converts CSV of daily cases from CDC provisional data (https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
+  to JSON of monthly cases.
+  """
+  def get_daily_cases_output() do
+    get_daily_output(
+      System.get_env("DAILY_CASES_CSV"),
+      [:state, :date, :new_cases, :seven_day_moving_average, :historic_cases],
+      System.get_env("DAILY_CASES_OUTPUT")
+    )
+  end
+
+  @doc """
+  Converts CSV of daily deaths from CDC provisional data (https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
+  to JSON of monthly deaths.
+  """
+  def get_daily_deaths_output() do
+    get_daily_output(
+      System.get_env("DAILY_DEATHS_CSV"),
+      [:state, :date, :new_deaths, :seven_day_moving_average, :historic_deaths],
+      System.get_env("DAILY_DEATHS_OUTPUT")
+    )
+  end
+
+  @doc """
+  Takes the cases or deaths CSV, sums by month, and writes to a JSON file.
+  """
+  def get_daily_output(csv_file, headers, json_file) do
+    acc =
+      File.stream!(csv_file)
+      |> Stream.drop(3)
+      |> CSV.decode(headers: headers)
+      |> Enum.map(fn row ->
+        {:ok, data} = row
+        data
+      end)
+      |> Poison.encode!()
+
+    File.write(json_file, acc)
+  end
 end
