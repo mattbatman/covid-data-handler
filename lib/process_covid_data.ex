@@ -83,6 +83,15 @@ defmodule ProcessCovidData do
         {:ok, data} = row
         data
       end)
+      |> Enum.map(fn data ->
+        {:ok, parsed} = Timex.parse(data.date, "%b %e %Y", :strftime)
+        %{data | date: parsed}
+      end)
+      |> Enum.sort_by(&Map.fetch!(&1, :date), Date)
+      |> Enum.map(fn data ->
+        {:ok, formatted} = Timex.format(data.date, "%b %e %Y", :strftime)
+        %{data | date: formatted}
+      end)
       |> Poison.encode!()
 
     File.write(json_file, acc)
