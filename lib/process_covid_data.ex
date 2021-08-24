@@ -66,7 +66,7 @@ defmodule ProcessCovidData do
   def get_daily_deaths_output() do
     get_daily_output(
       System.get_env("DAILY_DEATHS_CSV"),
-      [:state, :date, :new_deaths, :seven_day_moving_average, :historic_deaths],
+      [:state, :date, :new_deaths, :seven_day_moving_average],
       System.get_env("DAILY_DEATHS_OUTPUT")
     )
   end
@@ -95,5 +95,33 @@ defmodule ProcessCovidData do
       |> Poison.encode!()
 
     File.write(json_file, acc)
+  end
+
+  def get_weekly_flu_output do
+    headers = [
+      :year,
+      :week,
+      :percent_of_deaths_due_to_pneumonia_and_influenza,
+      :percent_of_deaths_due_to_pneumonia_influenza_or_COVID_19,
+      :expected,
+      :threshold,
+      :all_deaths,
+      :pneumonia_deaths,
+      :influenza_deaths,
+      :COVID_19_deaths,
+      :pneumonia_influenza_or_COVID_19_deaths
+    ]
+
+    acc =
+      File.stream!(System.get_env("WEEKLY_FLU_DEATHS_CSV"))
+      |> Stream.drop(1)
+      |> CSV.decode(headers: headers)
+      |> Enum.map(fn row ->
+        {:ok, data} = row
+        data
+      end)
+      |> Poison.encode!()
+
+    File.write(System.get_env("WEEKLY_FLU_DEATHS_OUTPUT"), acc)
   end
 end
