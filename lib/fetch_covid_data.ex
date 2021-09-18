@@ -28,6 +28,15 @@ defmodule FetchCovidData do
   end
 
   @doc """
+  Saves monthly counts of deaths by select causes, 2020-2021
+  https://data.cdc.gov/NCHS/Monthly-Provisional-Counts-of-Deaths-by-Select-Cau/9dzk-mvmi
+  """
+  def save_monthly_deaths_by_cause_2020_2021() do
+    fetch_monthly_deaths_by_cause_2020_2021()
+    |> handle_fetch(System.get_env("MONTHLY_DEATHS_BY_CAUSE_20_21_RAW"))
+  end
+
+  @doc """
   Takes an HTTPPoison response and a file path and name and writes the to the file path, if successful.
   """
   def handle_fetch(resp, output) do
@@ -69,6 +78,16 @@ defmodule FetchCovidData do
   """
   def fetch_cdc_data(query) do
     HTTPoison.get("https://data.cdc.gov/resource/vbim-akqf.json#{query}",
+      "X-App-Token": cdc_app_token(),
+      "content-type": "application/json"
+    )
+  end
+
+  @doc """
+  Fetches data from CDC API on monthly provisional deaths by selected causes.
+  """
+  def fetch_monthly_deaths_by_cause_2020_2021() do
+    HTTPoison.get("https://data.cdc.gov/resource/9dzk-mvmi.json",
       "X-App-Token": cdc_app_token(),
       "content-type": "application/json"
     )

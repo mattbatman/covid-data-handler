@@ -66,7 +66,7 @@ defmodule ProcessCovidData do
   def get_daily_deaths_output() do
     get_daily_output(
       System.get_env("DAILY_DEATHS_CSV"),
-      [:state, :date, :new_deaths, :seven_day_moving_average],
+      [:state, :date, :new_deaths, :seven_day_moving_average, :historic_deaths],
       System.get_env("DAILY_DEATHS_OUTPUT")
     )
   end
