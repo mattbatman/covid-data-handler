@@ -4,6 +4,90 @@ defmodule ProcessCovidData do
   """
 
   @doc """
+  Through an environment variable input, transforms a .txt of VAERS CDC wonder data
+  for reported vaccine deaths by year and writes as a JSON file. The disclaimers
+  and links at the bottom of the file .txt file should be manually deleted first.
+  """
+  def get_vaccine_deaths_by_year() do
+    json_keys = [
+      :year_reported,
+      :year_reported_code,
+      :events_reported,
+      :percent
+    ]
+
+    encoded_json_data =
+      File.stream!(System.get_env("VACCINE_DEATHS_BY_YEAR_INPUT"))
+      |> Enum.map(fn x ->
+        String.split(x, "\n", trim: true)
+      end)
+      |> List.flatten()
+      |> Enum.map(fn x ->
+        String.split(x, "\t", trim: true)
+        |> Enum.map(fn y ->
+          String.trim(y, "\"")
+        end)
+      end)
+      |> Enum.drop(1)
+      |> Enum.map(fn x ->
+        Enum.zip(json_keys, x)
+        |> Enum.into(%{})
+      end)
+      |> Poison.encode!()
+
+    File.write(System.get_env("VACCINE_DEATHS_BY_YEAR_OUTPUT"), encoded_json_data)
+  end
+
+  @doc """
+  Calculates the 2021 and 2021 annual deaths by select causes from saved monthly
+  2020 and 2021 deaths by select causes.
+  """
+  def get_2020_causes_of_death() do
+    saved_file_path = System.get_env("MONTHLY_DEATHS_BY_CAUSE_20_21_RAW")
+
+    starter = %{
+      "all_cause" => 0,
+      "natural_cause" => 0,
+      "septicemia" => 0,
+      "malignant_neoplasms" => 0,
+      "diabetes_mellitus" => 0,
+      "alzheimer_disease" => 0,
+      "influenza_and_pneumonia" => 0,
+      "chronic_lower_respiratory" => 0,
+      "other_diseases_of_respiratory" => 0,
+      "nephritis_nephrotic_syndrome" => 0,
+      "symptoms_signs_and_abnormal" => 0,
+      "diseases_of_heart" => 0,
+      "cerebrovascular_diseases" => 0,
+      "accidents_unintentional" => 0,
+      "motor_vehicle_accidents" => 0,
+      "intentional_self_harm_suicide" => 0,
+      "assault_homicide" => 0,
+      "drug_overdose" => 0,
+      "covid_19_multiple_cause_of" => 0,
+      "covid_19_underlying_cause" => 0
+    }
+
+    with {:ok, file} <- File.read(saved_file_path),
+         {:ok, json} <- Poison.decode(file) do
+      sum =
+        json
+        |> Enum.filter(fn x ->
+          x["year"] != "2021"
+        end)
+        |> Enum.reduce(starter, fn cv, acc ->
+          Enum.map(acc, fn {k, v} ->
+            {k, v + String.to_integer(cv[k])}
+          end)
+        end)
+        |> Enum.into(%{})
+        |> Poison.encode!()
+
+      File.write(System.get_env("ANNUAL_DEATHS_BY_CAUSE_2020"), sum)
+    end
+  end
+
+  @doc """
   Opens the cases and deaths by age group files, combines the data, and writes the combined data to a new, single file.
   """
   def get_combined_age_output() do

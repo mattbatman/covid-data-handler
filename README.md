@@ -34,4 +34,5 @@ ProcessCovidData.get_daily_deaths_output()
 ProcessCovidData.get_daily_cases_output()
 ProcessCovidData.get_weekly_flu_output()
 FetchCovidData.save_monthly_deaths_by_cause_2020_2021()
+ProcessCovidData.get_2020_causes_of_death()
 ```
