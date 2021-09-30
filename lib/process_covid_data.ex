@@ -38,6 +38,38 @@ defmodule ProcessCovidData do
     File.write(System.get_env("VACCINE_DEATHS_BY_YEAR_OUTPUT"), encoded_json_data)
   end
 
+  def get_all_vaccine_events_by_year() do
+    json_keys = [
+      :event_category,
+      :event_category_code,
+      :year_reported,
+      :year_reported_code,
+      :events_reported,
+      :percent
+    ]
+
+    encoded_json_data =
+      File.stream!(System.get_env("VACCINE_EVENTS_BY_YEAR_INPUT"))
+      |> Enum.map(fn x ->
+        String.split(x, "\n", trim: true)
+      end)
+      |> List.flatten()
+      |> Enum.map(fn x ->
+        String.split(x, "\t", trim: true)
+        |> Enum.map(fn y ->
+          String.trim(y, "\"")
+        end)
+      end)
+      |> Enum.drop(1)
+      |> Enum.map(fn x ->
+        Enum.zip(json_keys, x)
+        |> Enum.into(%{})
+      end)
+      |> Poison.encode!()
+
+    File.write(System.get_env("VACCINE_EVENTS_BY_YEAR_OUTPUT"), encoded_json_data)
+  end
+
   @doc """
   Calculates the 2021 and 2021 annual deaths by select causes from saved monthly
   2020 and 2021 deaths by select causes.
