@@ -1,4 +1,4 @@
-# CovidDataFetcher
+# CovidDataHandler
 
 This project contains a variety of methods to help fetch and transform data
 pertaining to COVID from the CDC.
