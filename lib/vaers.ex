@@ -1,6 +1,6 @@
 defmodule Vaers do
   @moduledoc """
-  Handles transforming exports from the [CDC's WONDER VAERS data(https://wonder.cdc.gov/vaers.html).
+  Handles transforming exports from the [CDC's WONDER VAERS data](https://wonder.cdc.gov/vaers.html).
   """
 
   @doc """

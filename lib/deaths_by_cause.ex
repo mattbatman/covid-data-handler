@@ -1,7 +1,7 @@
 defmodule DeathsByCause do
   @moduledoc """
   DeathsByCause handles interactions with the CDC's API dataset called,
-  ["Monthly Provisional Counts of Deaths by Select Causes, 2020-2021"](https://data.cdc.gov/NCHS/Monthly-Provisional-Counts-of-Deaths-by-Select-Cau/9dzk-mvmi
+  ["Monthly Provisional Counts of Deaths by Select Causes, 2020-2021"](https://data.cdc.gov/NCHS/Monthly-Provisional-Counts-of-Deaths-by-Select-Cau/9dzk-mvmi)
   """
 
   @doc """

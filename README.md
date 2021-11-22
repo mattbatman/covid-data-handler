@@ -1,6 +1,7 @@
 # CovidDataFetcher
 
-This project grabs data from the CDC's API for the *COVID-19 Case Surveillance Public Use Data* data set.
+This project contains a variety of methods to help fetch and transform data
+pertaining to COVID from the CDC.
 
 ## Up and Running
 
@@ -14,26 +15,85 @@ mix deps.get
 
 ### Configuring API Keys and Output
 
-Copy `.example.env` as `.env` and complete the environment variables as wanted. You'll need an API app key from the CDC for the [COVID-19 Case Surveillance Public Use Data](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf). You'll also need to configure the output file names and directories for the functions you want to run.
+Copy `.example.env` as `.env` and complete the environment variables as needed
+or desired.
 
-Two of the methods also require downloading provisional CDC data for daily cases and deaths [here](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases).
+You'll need an API app key from the CDC to fetch data. You can register for a
+Socrata account and [here](https://data.cdc.gov/login). You'll then need to
+create an app token. The same app token can be used on different datasets.
+
+## Modules and Use
+
+### Modules
+
+All functions for handling data from the dataset are broken out into their own
+modules. Currently:
+* `CaseSurveillance` handles the ["COVID-19 Case Surveillance Public Use Data"](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf) from the CDC's API
+* `DataTracker` handles data downloaded from [COVID Data Tracker](https://covid.cdc.gov/covid-data-tracker/#datatracker-home)
+* `DeathsByCause` handles the ["Monthly Provisional Counts of Deaths by Select Causes, 2020-2021"](https://data.cdc.gov/NCHS/Monthly-Provisional-Counts-of-Deaths-by-Select-Cau/9dzk-mvmi) from the CDC's API
+* `Flu` handles data downloaded from ["Pneumonia, Influenza, and COVID-19 Mortality from the National Center for Health Statistics Mortality Surveillance System"](https://www.cdc.gov/flu/weekly/index.htm)
+* `Vaers` handles data exported from the [CDC's WONDER VAERS data](https://wonder.cdc.gov/vaers.html)
 
 ### Use
 
-The module `FetchCovidData` is responsible for interactions with the API. The module `ProcessCovidData` performs data transformations on the JSON files already created from `FetchCovidData`.
-
-From your terminal:
+First, from your terminal:
 ```
 source .env
 iex -S mix
-FetchCovidData.save_cases_by_age_data()
-FetchCovidData.save_deaths_by_age_data()
-ProcessCovidData.get_combined_age_output()
+```
+
+#### COVID-19 Case Surveillance Public Use Data
+
+First, register an app token with the CDC Socrata API.
+
+To get combined cases and deaths by age:
+```
+CaseSurveillance.save_cases_by_age_data()
+CaseSurveillance.save_deaths_by_age_data()
+CaseSurveillance.get_combined_age_output()
+```
+
+To get deaths by underlying medical condition classification:
+```
 FetchCovidData.save_deaths_by_medcond()
-ProcessCovidData.get_daily_deaths_output()
-ProcessCovidData.get_daily_cases_output()
+```
+
+#### COVID Data Tracker
+
+First, download the daily and case chart data from the CDC. To transform the CSV
+to JSON:
+```
+DataTracker.get_daily_deaths_output()
+DataTracker.get_daily_cases_output()
+```
+
+#### Pneumonia, Influenza, and COVID-19 Mortality from the National Center for Health Statistics Mortality Surveillance System
+
+First, download the chart data from the CDC. To transform the CSV to JSON:
+```
 ProcessCovidData.get_weekly_flu_output()
-FetchCovidData.save_monthly_deaths_by_cause_2020_2021()
-ProcessCovidData.get_2020_causes_of_death()
-ProcessCovidData.get_all_vaccine_events_by_year()
+```
+
+#### Monthly Provisional Counts of Deaths by Select Causes, 2020-2021
+
+First, register an app token with the CDC Socrata API.
+
+To get the monthly deaths by cause:
+```
+DeathsByCause.save_monthly_deaths_by_cause_2020_2021()
+```
+
+
+To calculate the deaths by cause for the year of 2020:
+```
+DeathsByCause.save_monthly_deaths_by_cause_2020_2021()
+DeathsByCause.get_2020_causes_of_death()
+```
+
+#### VAERS Data
+
+First, export the text file of the VAERs data from the CDC WONDER system. To
+transform to JSON, manually delete the footer from the text file, then run:
+```
+Vaers.get_all_vaccine_events_by_year()
 ```
