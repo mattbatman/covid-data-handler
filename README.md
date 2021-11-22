@@ -6,7 +6,7 @@ This project grabs data from the CDC's API for the *COVID-19 Case Surveillance P
 
 ### Project Dependencies
 
-This project runs on Elixir. Install Elixir, and then the project dependencies with:
+This project runs on Elixir. First, install Elixir. Next, install the project dependencies with:
 
 ```
 mix deps.get
@@ -14,7 +14,7 @@ mix deps.get
 
 ### Configuring API Keys and Output
 
-Copy `.example.env` as `.env` and complete the environment variables. You'll need an API app key from the CDC for the [COVID-19 Case Surveillance Public Use Data](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf). You'll also need to configure the output file names and directories.
+Copy `.example.env` as `.env` and complete the environment variables as wanted. You'll need an API app key from the CDC for the [COVID-19 Case Surveillance Public Use Data](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf). You'll also need to configure the output file names and directories for the functions you want to run.
 
 Two of the methods also require downloading provisional CDC data for daily cases and deaths [here](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases).
 
