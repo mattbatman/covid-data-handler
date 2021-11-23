@@ -4,10 +4,9 @@ defmodule DataTracker do
   [COVID Data Tracker](https://covid.cdc.gov/covid-data-tracker/#datatracker-home)
   """
   @doc """
-  Converts CSV of daily cases from [CDC provisional data](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
-  to JSON of monthly cases. The daily cases CSV should be downloaded first, with
-  the input environment variable updated, as well as the desired JSON output
-  location.
+  Converts a CSV of daily cases from the [CDC provisional data](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
+  to a JSON of monthly cases. The daily cases CSV should be downloaded first. The
+  CSV input location and JSON output location are environment variables.
 
   A sample output:
   [
@@ -30,10 +29,9 @@ defmodule DataTracker do
   end
 
   @doc """
-  Converts CSV of daily deaths from [CDC provisional data](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
-  to JSON of monthly deaths. The daily deaths CSV should be downloaded first, with
-  the input environment variable updated, as well as the desired JSON output
-  location.
+  Converts a CSV of daily deaths from [CDC provisional data](https://covid.cdc.gov/covid-data-tracker/#trends_dailytrendscases)
+  to a JSON of monthly deaths. The daily deaths CSV should be downloaded first.
+  The CSV input location and JSON output location are environment variables.
 
   A sample output:
   [
@@ -56,8 +54,9 @@ defmodule DataTracker do
   end
 
   @doc """
-  Takes the cases or deaths CSV input location, expected CSV headers, and the
-  JSON output location. The CSV inptu is transformed to JSON.
+  Takes the cases or deaths CSV input file path, expected CSV headers, and the
+  JSON output file path. The CSV input is transformed to JSON as an array of
+  objects.
   """
   def get_daily_output(csv_file, headers, json_file) do
     acc =

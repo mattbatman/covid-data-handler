@@ -3,11 +3,13 @@
 This project contains a variety of methods to help fetch and transform data
 pertaining to COVID from the CDC.
 
+Everything in this repository was made to prepare data for [Sum COVID](https://sumcovid.info).
+
 ## Up and Running
 
 ### Project Dependencies
 
-This project runs on Elixir. First, install Elixir. Next, install the project dependencies with:
+First, install Elixir. Next, install the project dependencies with:
 
 ```
 mix deps.get
@@ -15,21 +17,19 @@ mix deps.get
 
 ### Configuring API Keys and Output
 
-Copy `.example.env` as `.env` and complete the environment variables as needed
-or desired.
+Copy `.example.env` as `.env` and complete the environment variables as needed.
 
-You'll need an API app key from the CDC to fetch data. You can register for a
-Socrata account and [here](https://data.cdc.gov/login). You'll then need to
+You'll need an app key from the CDC API to fetch data. You can register for a
+Socrata account [here](https://data.cdc.gov/login). You'll then need to
 create an app token. The same app token can be used on different datasets.
 
-## Modules and Use
+## Module Explanation and Use
 
 ### Modules
 
-All functions for handling data from the dataset are broken out into their own
-modules. Currently:
+All functions are broken out into modules based on the CDC `dataset they work with. Currently:
 * `CaseSurveillance` handles the ["COVID-19 Case Surveillance Public Use Data"](https://dev.socrata.com/foundry/data.cdc.gov/vbim-akqf) from the CDC's API
-* `DataTracker` handles data downloaded from [COVID Data Tracker](https://covid.cdc.gov/covid-data-tracker/#datatracker-home)
+* `DataTracker` handles data downloaded from the [COVID Data Tracker](https://covid.cdc.gov/covid-data-tracker/#datatracker-home)
 * `DeathsByCause` handles the ["Monthly Provisional Counts of Deaths by Select Causes, 2020-2021"](https://data.cdc.gov/NCHS/Monthly-Provisional-Counts-of-Deaths-by-Select-Cau/9dzk-mvmi) from the CDC's API
 * `Flu` handles data downloaded from ["Pneumonia, Influenza, and COVID-19 Mortality from the National Center for Health Statistics Mortality Surveillance System"](https://www.cdc.gov/flu/weekly/index.htm)
 * `Vaers` handles data exported from the [CDC's WONDER VAERS data](https://wonder.cdc.gov/vaers.html)
@@ -60,7 +60,7 @@ FetchCovidData.save_deaths_by_medcond()
 
 #### COVID Data Tracker
 
-First, download the daily and case chart data from the CDC. To transform the CSV
+First, download the [daily case and death table data from the CDC](https://covid.cdc.gov/covid-data-tracker/#trends_dailycases). To transform the CSV
 to JSON:
 ```
 DataTracker.get_daily_deaths_output()
