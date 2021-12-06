@@ -71,7 +71,7 @@ DataTracker.get_daily_cases_output()
 
 First, download the chart data from the CDC. To transform the CSV to JSON:
 ```
-ProcessCovidData.get_weekly_flu_output()
+Flu.get_weekly_flu_output()
 ```
 
 #### Monthly Provisional Counts of Deaths by Select Causes, 2020-2021
@@ -92,8 +92,9 @@ DeathsByCause.get_2020_causes_of_death()
 
 #### VAERS Data
 
-First, export the text file of the VAERs data from the CDC WONDER system. To
-transform to JSON, manually delete the footer from the text file, then run:
+First, export the text file of the VAERs data from the CDC WONDER system. Ensure
+that "Show Totals" is not selected. To transform to JSON, manually delete the
+footer from the text file, then run:
 ```
 Vaers.get_all_vaccine_events_by_year()
 ```
