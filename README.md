@@ -55,7 +55,7 @@ CaseSurveillance.get_combined_age_output()
 
 To get deaths by underlying medical condition classification:
 ```
-FetchCovidData.save_deaths_by_medcond()
+CaseSurveillance.save_deaths_by_medcond()
 ```
 
 #### COVID Data Tracker
@@ -65,6 +65,7 @@ to JSON:
 ```
 DataTracker.get_daily_deaths_output()
 DataTracker.get_daily_cases_output()
+DataTracker.get_seven_day_moving_average_cfr_output()
 ```
 
 #### Pneumonia, Influenza, and COVID-19 Mortality from the National Center for Health Statistics Mortality Surveillance System
